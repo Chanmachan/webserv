@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+playground/nfukuma
+myechosever/a.out
+.idea
+.clang-format
+myechosever/cmake-build-debug
