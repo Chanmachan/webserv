@@ -3,4 +3,4 @@ project(myechoserver)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(exe server.cpp)
+add_executable(exe server.cpp client.cpp)
