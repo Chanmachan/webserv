@@ -16,13 +16,19 @@ public:
     ~ConfParser();
     std::vector<Server> parseConfigFile(const std::string& conf_path);
     bool readFile(const std::string& conf_path);
-    void parseServerBlock(std::vector<Server>& servers);
+    void parseServerBlocks(std::vector<Server>& servers);
+    bool parseServerBlock(Server& server);
+    void parseListenDirective(Server& server);
+    void parseServerNameDirective(Server& server);
+    void parseLocationBlock(Server& server);
     std::string getWord();
     bool isDelimiter();
     bool isEof();
+    void skipSpace();
 private:
     std::string file_data_;
     size_t index_;
+    std::string::size_type pos_;
 
 public:
     //テスト用
