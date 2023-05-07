@@ -14,7 +14,7 @@ class ConfParser {
 public:
     ConfParser();
     ~ConfParser();
-    std::vector<Server> parseConfigFile(const std::string& conf_path);
+    void parseConfigFile(const std::string& conf_path, Conf& conf);
     bool readFile(const std::string& conf_path);
     void parseServerBlocks(std::vector<Server>& servers);
     bool parseServerBlock(Server& server);
@@ -27,7 +27,6 @@ public:
     void skipSpace();
 private:
     std::string file_data_;
-    size_t index_;
     std::string::size_type pos_;
 
 public:

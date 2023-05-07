@@ -4,11 +4,11 @@
 
 #include "ConfParser.hpp"
 
-ConfParser::ConfParser() : index_(0), pos_(0) {}
+ConfParser::ConfParser() : pos_(0) {}
 
 ConfParser::~ConfParser() {}
 
-std::vector<Server> ConfParser::parseConfigFile(const std::string &conf_path) {
+void ConfParser::parseConfigFile(const std::string &conf_path, Conf &conf) {
   // configファイルを読み込む
   if (!readFile(conf_path)) {
     throw std::runtime_error("Failed to read config file.");
@@ -16,8 +16,7 @@ std::vector<Server> ConfParser::parseConfigFile(const std::string &conf_path) {
   // serverブロックをパースする
   std::vector<Server> servers;
   parseServerBlocks(servers);
-
-  return servers;
+  conf.setConfServer(servers);
 }
 
 // "server"文字列があるごとにwhileループを回す
@@ -107,10 +106,7 @@ void ConfParser::parseServerNameDirective(Server &server) {
   // セミコロンまでループを回す
   // 空白区切りでserver_nameにpush_backする
   while (true) {
-    skipSpace();
-    //　黄色で何回ここの処理に来たか出力
-    std::cout << "\033[33m" << "parseServerNameDirective: " << "\033[0m" << std::endl;
-    if (file_data_[pos_] == ';') {
+    if (file_data_[pos_ - 1] == ';') { // 1文字前が';'なら -> getWord()で';'を読み飛ばしているので
       pos_++;
       break;
     } else if (isEof()) {
@@ -119,9 +115,6 @@ void ConfParser::parseServerNameDirective(Server &server) {
     }
     word = getWord();
     server.server_names_.push_back(word);
-  }
-  for (size_t i = 0; i < server.server_names_.size(); i++) {
-    std::cout << "\033[36m" << "server_name: " << &server.server_names_ << "\033[0m";
   }
 }
 
@@ -148,6 +141,7 @@ bool ConfParser::readFile(const std::string &conf_path) {
   std::ifstream ifs(conf_path);
   if (!ifs) {
     std::cerr << "Failed to open file." << std::endl;
+    perror("open");
     return false;
   }
   std::stringstream ss;
