@@ -27,6 +27,7 @@ webserverの設定を扱うクラス
 #include <map>
 #include <set>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 // デバッグ用
 #include <iostream>
 
