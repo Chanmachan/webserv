@@ -144,6 +144,7 @@ void ConfParser::parseListenDirective(Server &server) {
 
   std::string ip;
   std::string port;
+  std::cout << "word: " << word << std::endl;
   if (word.find(":") != std::string::npos) {
     ip = word.substr(0, word.find(":"));
     port = word.substr(word.find(":") + 1);
