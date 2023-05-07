@@ -7,3 +7,6 @@ target_link_libraries(test_Conf PRIVATE MyConf Boost::unit_test_framework)
 
 # インクルードパスを設定
 target_include_directories(test_Conf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../srcs/conf)
+
+#他のディレクトリからcolor.hをインクルードするために必要
+target_include_directories(test_Conf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../tests/includes)
