@@ -3,6 +3,7 @@
 //
 
 #include "ConfParser.hpp"
+#include "../../tests/includes/color.hpp"
 
 ConfParser::ConfParser() : pos_(0) {}
 
@@ -51,13 +52,10 @@ bool ConfParser::parseServerBlock(Server &server) {
   while (!isEof()) {
     std::string word = getWord();
     if (word == "listen") {
-      // listenディレクティブをパースする
       parseListenDirective(server);
     } else if (word == "server_name") {
-      // server_nameディレクティブをパースする
       parseServerNameDirective(server);
     } else if (word == "location") {
-      // locationディレクティブをパースする
       parseLocationBlock(server);
     } else if (word == "}") {
       break;
@@ -93,10 +91,31 @@ void ConfParser::parseLocationBlock(Server &server) {
       location.index_ = getWord();
     } else if (word == "error_page") {
       std::cout << "error_page" << std::endl;
+    } else if (word == "allow_method") {
+      parseAllowMethods(location);
     }
   }
   // locationをserver.locations_に格納する
   server.locations_.push_back(location);
+}
+
+void ConfParser::parseAllowMethods(Location &location) {
+  while (true) {
+    if (file_data_[pos_ - 1] == ';') { // 1文字前が';'なら -> getWord()で';'を読み飛ばしているので
+      break;
+    } else if (isEof()) {
+      break;
+    }
+    skipSpace();
+    std::string word = getWord();
+    if (word == "GET") {
+      location.allow_method_.insert(GET);
+    } else if (word == "POST") {
+      location.allow_method_.insert(POST);
+    } else if (word == "DELETE") {
+      location.allow_method_.insert(DELETE);
+    }
+  }
 }
 
 // server_nameディレクティブをパースする
@@ -153,7 +172,7 @@ bool ConfParser::readFile(const std::string &conf_path) {
 // delimiterで区切られた文字列を返す
 std::string ConfParser::getWord() {
   std::string word;
-  while (!isEof() && !isspace(file_data_[pos_]) && !isDelimiter()) {
+  while (!isEof() && !isspace(file_data_[pos_]) && !isDelimiter() && file_data_[pos_] != ',') {
     word += file_data_[pos_];
     pos_++;
   }
