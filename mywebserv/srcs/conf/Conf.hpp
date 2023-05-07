@@ -90,11 +90,6 @@ public:
 
     void parseConfigFile(std::string conf_path);
 
-    // ゲッター
-    std::vector<Server> getServerVec() const {
-      return server_vec_;
-    };
-
 private:
     std::vector<Server> server_vec_;
 
