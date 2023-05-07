@@ -31,3 +31,8 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
+docker:
+	cd docker && docker compose up -d && docker exec -it debian /bin/bash
+
+.PHONY: docker
