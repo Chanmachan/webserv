@@ -3,7 +3,6 @@
 //
 
 #include "ConfParser.hpp"
-#include "../../tests/includes/color.hpp"
 
 ConfParser::ConfParser() : pos_(0) {}
 
@@ -139,19 +138,29 @@ void ConfParser::parseServerNameDirective(Server &server) {
 
 // listenディレクティブをパースする
 void ConfParser::parseListenDirective(Server &server) {
-  // listenの次の文字列を取得する
-  std::string word = getWord();
-  // wordが数字でなければエラー
-  for (size_t i = 0; i < word.size(); i++) {
-    if (!isdigit(word[i])) {
-      std::cerr << "Error: in parseListenDirective: port number is not a number." << std::endl;
-      exit(false);
+  skipSpace();
+    std::string word = getWord();
+    skipSpace();
+
+  std::string ip;
+  std::string port;
+  if (word.find(":") != std::string::npos) {
+    ip = word.substr(0, word.find(":"));
+    port = word.substr(word.find(":") + 1);
+  } else {
+// listenの次の文字列を取得する
+    // wordが数字でなければエラー
+    for (size_t i = 0; i < word.size(); i++) {
+      if (!isdigit(word[i])) {
+        std::cerr << "Error: in parseListenDirective: port number is not a number." << std::endl;
+        exit(false);
+      }
     }
+    ip = "0.0.0.0";
+    port = word;
   }
-  // server.listen_に格納する
-  server.listen_.sin_family = AF_INET;
-  server.listen_.sin_addr.s_addr = INADDR_ANY;
-  server.listen_.sin_port = htons(std::stoi(word));
+  server.listen_.sin_addr.s_addr = inet_addr(ip.c_str());
+  server.listen_.sin_port = htons(std::stoi(port));
 
 }
 
