@@ -25,6 +25,7 @@ webserverの設定を扱うクラス
 #include <sys/socket.h>
 #include <string>
 #include <map>
+#include <set>
 #include <netinet/in.h>
 // デバッグ用
 #include <iostream>
@@ -43,7 +44,7 @@ enum method {
 
 struct Location {
     match_type match_; // 後方一致は、CGIの場合のみ使用可能
-    int allow_method_; // GET POST DELETE から１個以上指定 ビット演算で複数指定可
+    std::set<method> allow_method_; // GET POST DELETE から１個以上指定 ビット演算で複数指定可
     size_t client_max_body_size_; // 任意 単一 デフォルト１MB, 0は無制限 制限超え
     // 413 Request Entity Too Large
     // 制限されるのはボディ部分でヘッダーは含まない
@@ -98,6 +99,18 @@ public:
         std::cout << std::endl;
         for (std::vector<Location>::iterator it3 = it->locations_.begin(); it3 != it->locations_.end(); ++it3) {
           std::cout << "location: " << it3->root_ << std::endl;
+          // allow_method_の出力
+          std::set<method>::iterator it4 = it3->allow_method_.begin();
+          std::cout << "allow_method: ";
+          for (; it4 != it3->allow_method_.end(); ++it4) {
+            if (*it4 == GET)
+              std::cout << "GET ";
+            else if (*it4 == POST)
+              std::cout << "POST ";
+            else if (*it4 == DELETE)
+              std::cout << "DELETE ";
+          }
+          std::cout << std::endl;
           std::cout << "index: " << it3->index_ << std::endl;
           std::cout << "is_cgi: " << it3->is_cgi_ << std::endl;
           std::cout << "cgi_executor: " << it3->cgi_executor_ << std::endl;

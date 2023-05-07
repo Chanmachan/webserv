@@ -21,6 +21,7 @@ public:
     void parseListenDirective(Server& server);
     void parseServerNameDirective(Server& server);
     void parseLocationBlock(Server& server);
+    void parseAllowMethods(Location& location);
     std::string getWord();
     bool isDelimiter();
     bool isEof();
