@@ -52,16 +52,9 @@ BOOST_AUTO_TEST_CASE(test_conf_3)
 
   test3.setFileData("127.0.0.1:80");
   test3.parseListenDirective(server);
-  if (server.listen_.sin_addr.s_addr == inet_addr("127.0.0.1")) {
-    std::cout << "test3.parseListenDirective(server): " << GREEN << "OK" << RESET << std::endl;
-  } else {
-    std::cout << "test3.parseListenDirective(server): " << RED << "NG" << RESET << std::endl;
-    std::cout << "server.listen_.sin_addr.s_addr: " << server.listen_.sin_addr.s_addr << std::endl;
-  }
-  if (server.listen_.sin_port == htons(80)) {
-    std::cout << "test3.parseListenDirective(server): " << GREEN << "OK" << RESET << std::endl;
-  } else {
-    std::cout << "test3.parseListenDirective(server): " << RED << "NG" << RESET << std::endl;
-    std::cout << "server.listen_.sin_port: " << server.listen_.sin_port << std::endl;
-  }
+  BOOST_CHECK_EQUAL(server.listen_.listen_ip_port_, "127.0.0.1:80");
+  BOOST_CHECK_EQUAL(server.listen_.listen_ip_, "127.0.0.1");
+  BOOST_CHECK_EQUAL(server.listen_.listen_port_, 80);
+
+
 }

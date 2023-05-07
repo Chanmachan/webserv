@@ -142,12 +142,13 @@ void ConfParser::parseListenDirective(Server &server) {
     std::string word = getWord();
     skipSpace();
 
-  std::string ip;
-  std::string port;
+    int port;
+  std::string ip_str;
+  std::string port_str;
   std::cout << "word: " << word << std::endl;
   if (word.find(":") != std::string::npos) {
-    ip = word.substr(0, word.find(":"));
-    port = word.substr(word.find(":") + 1);
+    ip_str = word.substr(0, word.find(":"));
+    port_str = word.substr(word.find(":") + 1);
   } else {
 // listenの次の文字列を取得する
     // wordが数字でなければエラー
@@ -157,11 +158,13 @@ void ConfParser::parseListenDirective(Server &server) {
         exit(false);
       }
     }
-    ip = "0.0.0.0";
-    port = word;
+    ip_str = "0.0.0.0";
+    port_str = word;
   }
-  server.listen_.sin_addr.s_addr = inet_addr(ip.c_str());
-  server.listen_.sin_port = htons(std::stoi(port));
+  port = std::stoi(port_str);
+  server.listen_.listen_ip_port_ = ip_str + ":" + port_str;
+  server.listen_.listen_ip_ = ip_str;
+  server.listen_.listen_port_ = port;
 
 }
 

@@ -62,8 +62,14 @@ struct Location {
     // std::string upload_path_;
 };
 
+struct Listen { // 単一
+    std::string listen_ip_port_;
+    std::string listen_ip_;
+    int listen_port_;
+};
+
 struct Server { // 各バーチャルサーバーの設定を格納する
-    struct sockaddr_in listen_; // 必須 単一
+    Listen listen_; // 必須 単一
 
     std::vector<std::string> server_names_;
     // 任意 単一 ディレクティブは一つで、複数指定された場合は最後の一つだけ保持
@@ -84,6 +90,11 @@ public:
 
     void parseConfigFile(std::string conf_path);
 
+    // ゲッター
+    std::vector<Server> getServerVec() const {
+      return server_vec_;
+    };
+
 private:
     std::vector<Server> server_vec_;
 
@@ -91,7 +102,7 @@ public:
     // server_vec_を出力する関数
     void printConf() {
       for (std::vector<Server>::iterator it = server_vec_.begin(); it != server_vec_.end(); ++it) {
-        std::cout << "listen: " << it->listen_.sin_port << std::endl;
+//        std::cout << "listen: " << it->listen_.sin_port << std::endl;
         std::cout << "server_name: ";
         for (std::vector<std::string>::iterator it2 = it->server_names_.begin();
              it2 != it->server_names_.end(); ++it2) {
