@@ -11,5 +11,6 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <sys/epoll.h>
+#include <cerrno>
 
 #endif //MYPROJECT_SERVER_HPP
