@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Conf.hpp"
-#include "ConfParser.hpp"
+#include "Socket.hpp"
 
 int main() {
   // Confをパースする
@@ -12,9 +12,9 @@ int main() {
     std::cerr << e.what() << std::endl;
   }
   // Confを元にWebServerを作成する
+  ConnectSocket connect_socket;
   // WebServerを起動する
   // WebServerを停止する
-
   return 0;
 
 }
