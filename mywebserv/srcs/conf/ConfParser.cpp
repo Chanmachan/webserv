@@ -161,7 +161,7 @@ void ConfParser::parseListenDirective(Server &server) {
     ip_str = "0.0.0.0";
     port_str = word;
   }
-  port = std::stoi(port_str);
+  port = std::atoi(port_str.c_str());
   server.listen_.listen_ip_port_ = ip_str + ":" + port_str;
   server.listen_.listen_ip_ = ip_str;
   server.listen_.listen_port_ = port;
@@ -170,7 +170,7 @@ void ConfParser::parseListenDirective(Server &server) {
 
 bool ConfParser::readFile(const std::string &conf_path) {
   std::cout << "Trying to open file: " << conf_path << std::endl;
-  std::ifstream ifs(conf_path);
+  std::ifstream ifs(conf_path.c_str());
   if (!ifs) {
     std::cerr << "Failed to open file." << std::endl;
     perror("open");

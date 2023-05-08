@@ -8,7 +8,7 @@
 
 /* ASocket */
 
-ASocket::ASocket() : sock_fd_(-1), conf_(NULL) {
+ASocket::ASocket() : sock_fd_(-1) {
   memset(&sockaddr_in_, 0, sizeof(sockaddr_in_));
 }
 
@@ -71,5 +71,6 @@ bool ListenSocket::setupSocket() {
     std::cerr << "listen: " << strerror(errno) << std::endl;
     return false;
   }
+  return true;
 }
 
