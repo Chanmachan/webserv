@@ -81,7 +81,7 @@ int main() {
 
   while (1) {
     // eventが起こるまで待つ
-    // ecentが起きるとevents配列に情報が格納される
+    // eventが起きるとevents配列に情報が格納される
     int num_events = epoll_wait(epoll_fd, events, max_events, -1);
     if (num_events < 0) {
       error_exit("epoll_wait");
